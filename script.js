@@ -1,114 +1,76 @@
-const canvas = document.querySelector(canvas);
-const ctx = canvas.getContext(2d);
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+SVG.on(document, "DOMContentLoaded", () => {
+  const slideToggle = document.getElementById("slide-toggle-control");
+  const randomSlideToggle = document.getElementById("random-slide-toggle-control");
+  const delayedSlideToggle = document.getElementById("delayed-offset-slide-toggle-control");
 
-const particles = [];
-const particleCount = 1200;
-const textArray = [Design., Code., Coffee.];
-let currentTextIndex = 0;
-let nextTextTimeout;
-let textCoordinates = [];
+  const slide = {
+    element: slideToggle,
+    handler: svgSlideEffect,
+    offset: 10,
+    duration: 200,
+    random: false,
+  };
 
-const mouse = {
-    x -500,
-    y -500,
-    radius 50
+  const randomSlide = {
+    element: randomSlideToggle,
+    handler: svgSlideEffect,
+    offset: 8,
+    duration: 150,
+    random: true,
+  };
+  
+  const delayedOffsetSlide = {
+    element: delayedSlideToggle,
+    handler: svgSlideEffect,
+    offset: 50,
+    duration: 50,
+    random: false,
+  };
+
+  new SvgToggleEffect(slide);
+  new SvgToggleEffect(randomSlide);
+  new SvgToggleEffect(delayedOffsetSlide);
+});
+
+class SvgToggleEffect {
+  constructor(effect) {
+    this.nodes = [
+      ...effect.element.nextElementSibling.querySelectorAll(".row")
+    ];
+
+    this.nodes.forEach((node, index) => {
+      this.nodes[index] = SVG(node);
+    });
+
+    if (effect.random) {
+      this.randomizeArray(this.nodes);
+    }
+
+    effect.element.addEventListener("change", () => {
+      if (effect.element.checked) {
+        effect.handler(this.nodes, false, effect.duration, effect.offset);
+      } else {
+        effect.handler(this.nodes, true, effect.duration, effect.offset);
+      }
+    });
+  }
+
+  randomizeArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+  }
+}
+
+const svgSlideEffect = (nodes = [], reverse = false, duration = 100, offset = 10) => {
+  nodes.forEach((node, index) => {
+    setTimeout(() => {
+      if (reverse) {
+        node.animate({ duration: duration }).transform({ translate: 0 });
+      } else {
+        node.animate({ duration: duration }).transform({ translate: 48 });
+      }
+    }, index * offset);
+  });
 };
-
-class Particle {
-    constructor(x, y) {
-        this.x = x;
-        this.y = y;
-        this.size = 1;
-        this.baseX = x;
-        this.baseY = y;
-        this.density = Math.random()  30 + 1;
-        this.color = white;
-        this.history = [];
-    }
-
-    update() {
-        let dx = mouse.x - this.x;
-        let dy = mouse.y - this.y;
-        let distance = Math.sqrt(dx  dx + dy  dy);
-
-        if (distance  mouse.radius) {
-            let forceDirectionX = dx  distance;
-            let forceDirectionY = dy  distance;
-            let maxDistance = mouse.radius;
-            let force = (maxDistance - distance)  maxDistance;
-            let directionX = forceDirectionX  force  this.density;
-            let directionY = forceDirectionY  force  this.density;
-
-            this.x -= directionX;
-            this.y -= directionY;
-        } else {
-            this.x += (this.baseX - this.x)  0.05;
-            this.y += (this.baseY - this.y)  0.05;
-        }
-
-        this.history.push({ x this.x, y this.y });
-        if (this.history.length  10) {
-            this.history.shift();
-        }
-
-        const speed = Math.sqrt(
-            (this.baseX - this.x)  2 + (this.baseY - this.y)  2
-        );
-        const hue = (speed  100)  360;
-
-        this.color = `hsl(${hue}, 100%, ${100 - speed  5}%)`;
-
-        if (this.history.length  10) {
-            this.history.shift();
-        }
-    }
-
-    draw() {
-        ctx.beginPath();
-        ctx.moveTo(this.history[0].x, this.history[0].y);
-        for (let i = 1; i  this.history.length; i++) {
-            ctx.lineTo(this.history[i].x, this.history[i].y);
-        }
-        ctx.strokeStyle = this.color;
-        ctx.stroke();
-
-        ctx.fillStyle = this.color;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI  2);
-        ctx.closePath();
-        ctx.fill();
-    }
-}
-
-function createParticles() {
-    particles.length = 0;
-    textCoordinates = getTextCoordinates(textArray[currentTextIndex]);
-
-    for (let i = 0; i  particleCount; i++) {
-        const randomIndex = Math.floor(Math.random()  textCoordinates.length);
-        const x = textCoordinates[randomIndex].x;
-        const y = textCoordinates[randomIndex].y;
-        particles.push(new Particle(x, y));
-    }
-}
-
-function getTextCoordinates(text) {
-    const fontSize = Math.min(canvas.width  10, canvas.height  5);
-    ctx.font = `${fontSize}px Arial`;
-    ctx.fillStyle = white;
-    ctx.textAlign = center;
-    ctx.textBaseline = middle;
-
-    const x = canvas.width  2;
-    const y = canvas.height  2;
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillText(text, x, y);
-
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-    const coordinates = [];
-
-    for (let y = 0; y  canvas.height; y += 4) {
-        for (let x = 0; x  canvas.width
