@@ -10,7 +10,7 @@ load_dotenv()
 TOKEN = os.getenv('TOKEN')
 
 # Проверка загрузки токена
-if не TOKEN:
+if not TOKEN:
     print("Содержимое файла .env:")
     with open('.env', 'r') as f:
         print(f.read())
