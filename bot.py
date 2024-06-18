@@ -1,7 +1,6 @@
 import os
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
 from telegram.ext import Updater, CommandHandler, CallbackContext
-from telegram import WebAppInfo
 from dotenv import load_dotenv
 
 # Загрузка переменных окружения из .env файла
@@ -30,7 +29,7 @@ def start(update: Update, context: CallbackContext):
 
 # Основная функция
 def main():
-    updater = Updater(TOKEN, use_context=True)
+    updater = Updater(TOKEN)
 
     dp = updater.dispatcher
     dp.add_handler(CommandHandler("start", start))
