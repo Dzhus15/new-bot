@@ -1,6 +1,6 @@
 import os
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
-from telegram.ext import Updater, CommandHandler, CallbackContext
+from telegram.ext import Application, CommandHandler, CallbackContext
 from dotenv import load_dotenv
 
 # Загрузка переменных окружения из .env файла
@@ -17,25 +17,23 @@ if not TOKEN:
     raise ValueError("Токен не найден. Пожалуйста, убедитесь, что файл .env содержит корректный токен.")
 
 # Обработчик команды /start
-def start(update: Update, context: CallbackContext):
+async def start(update: Update, context: CallbackContext):
     keyboard = [
         [InlineKeyboardButton("Открыть веб-интерфейс", web_app=WebAppInfo(url="https://dzhus15.github.io/Telegram-bot/index.html"))],
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
-    update.message.reply_text(
+    await update.message.reply_text(
         'Добро пожаловать в кофейню "Ну, погоди!" Используйте кнопку ниже для открытия веб-интерфейса.',
         reply_markup=reply_markup
     )
 
 # Основная функция
 def main():
-    updater = Updater(TOKEN)
+    application = Application.builder().token(TOKEN).build()
 
-    dp = updater.dispatcher
-    dp.add_handler(CommandHandler("start", start))
+    application.add_handler(CommandHandler("start", start))
 
-    updater.start_polling()
-    updater.idle()
+    application.run_polling()
 
 if __name__ == '__main__':
     main()
