@@ -16,22 +16,36 @@ if not TOKEN:
         print(f.read())
     raise ValueError("Токен не найден. Пожалуйста, убедитесь, что файл .env содержит корректный токен.")
 
-# Верификационные коды и данные сотрудников
-EMPLOYEE_DATA = {
-    'exampleCode': {
-        'name': 'Иван Иванов',
-        'position': 'Бариста',
-        'location': 'Кофейня №1',
-        'access': 'Полный'
-    },
-    # Добавьте больше данных сотрудников здесь
-}
+# Верификационные коды и данные сотрудников (инициализация пустого словаря)
+EMPLOYEE_DATA = {}
 
+# Обработчик команды /start
 def start(update: Update, context: CallbackContext):
+    keyboard = [
+        [InlineKeyboardButton("Открыть веб-интерфейс", url="https://ваш-домен.github.io/ваш-репозиторий/index.html")],
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
     update.message.reply_text(
-        'Добро пожаловать в кофейню "Ну, погоди!" Введите свой верификационный код:'
+        'Добро пожаловать в кофейню "Ну, погоди!" Введите свой верификационный код или используйте кнопки ниже.',
+        reply_markup=reply_markup
     )
 
+# Обработчик команды для добавления верификационного кода
+def add_code(update: Update, context: CallbackContext):
+    if len(context.args) != 5:
+        update.message.reply_text('Использование: /addcode <код> <имя> <фамилия> <должность> <место работы>')
+        return
+    
+    code, name, surname, position, location = context.args
+    EMPLOYEE_DATA[code] = {
+        'name': f'{name} {surname}',
+        'position': position,
+        'location': location,
+        'access': 'Полный'
+    }
+    update.message.reply_text(f'Код {code} добавлен для сотрудника {name} {surname}.')
+
+# Обработчик для проверки верификационного кода
 def verify(update: Update, context: CallbackContext):
     code = update.message.text
     if code in EMPLOYEE_DATA:
@@ -55,6 +69,7 @@ def verify(update: Update, context: CallbackContext):
     else:
         update.message.reply_text('Неверный верификационный код. Пожалуйста, попробуйте еще раз.')
 
+# Обработчик кнопок меню
 def button(update: Update, context: CallbackContext):
     query = update.callback_query
     query.answer()
@@ -70,11 +85,13 @@ def button(update: Update, context: CallbackContext):
 
     query.edit_message_text(text=section_texts.get(query.data, 'Неизвестный раздел'))
 
+# Основная функция
 def main():
     updater = Updater(TOKEN, use_context=True)
 
     dp = updater.dispatcher
     dp.add_handler(CommandHandler("start", start))
+    dp.add_handler(CommandHandler("addcode", add_code))
     dp.add_handler(MessageHandler(Filters.text & ~Filters.command, verify))
     dp.add_handler(CallbackQueryHandler(button))
 
