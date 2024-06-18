@@ -1,114 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ну, погоди! Кофейня</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        body {
-            font-family: 'Comic Sans MS', cursive, sans-serif;
-            background-color: #f0f8ff;
-            color: #333;
-        }
-        .container {
-            max-width: 800px;
-            margin: auto;
-            padding: 20px;
-        }
-        h1, h2 {
-            color: #2c3e50;
-        }
-        .section {
-            margin-bottom: 20px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .btn {
-            background-color: #2c3e50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .btn:hover {
-            background-color: #34495e;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
+    <header>
         <h1>Ну, погоди! Кофейня</h1>
-        <div id="auth-section" class="section">
-            <h2>Верификация</h2>
-            <input type="text" id="auth-code" placeholder="Введите верификационный код">
-            <button class="btn" onclick="verifyCode()">Войти</button>
-        </div>
-        <div id="info-section" class="section" style="display: none;">
-            <h2>Информация о сотруднике</h2>
-            <p id="employee-name"></p>
-            <p id="employee-position"></p>
-            <p id="employee-location"></p>
-            <p id="employee-access"></p>
-        </div>
-        <div id="main-menu" class="section" style="display: none;">
-            <h2>Меню</h2>
-            <button class="btn" onclick="showSection('shifts')">Смены</button>
-            <button class="btn" onclick="showSection('map')">Места работы на карте</button>
-            <button class="btn" onclick="showSection('tech-cards')">Технологические карты</button>
-            <button class="btn" onclick="showSection('menu')">Меню</button>
-            <button class="btn" onclick="showSection('news')">Новости</button>
-            <button class="btn" onclick="showSection('training-chat')">Чат обучения</button>
-        </div>
-        <div id="shifts-section" class="section" style="display: none;">
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#shifts">Смены</a></li>
+            <li><a href="#map">Места работы на карте</a></li>
+            <li><a href="#tech-cards">Технологические карты</a></li>
+            <li><a href="#menu">Меню</a></li>
+            <li><a href="#news">Новости</a></li>
+            <li><a href="#training-chat">Чат обучения</a></li>
+        </ul>
+    </nav>
+    <main>
+        <section id="shifts">
             <h2>Смены</h2>
-            <!-- Контент раздела смен -->
-        </div>
-        <div id="map-section" class="section" style="display: none;">
+            <p>Информация о сменах...</p>
+        </section>
+        <section id="map">
             <h2>Места работы на карте</h2>
-            <!-- Карта -->
-        </div>
-        <div id="tech-cards-section" class="section" style="display: none;">
+            <p>Информация о местах работы...</p>
+        </section>
+        <section id="tech-cards">
             <h2>Технологические карты</h2>
-            <!-- Контент технологических карт -->
-        </div>
-        <div id="menu-section" class="section" style="display: none;">
+            <p>Информация о технологических картах...</p>
+        </section>
+        <section id="menu">
             <h2>Меню</h2>
-            <!-- Контент меню -->
-        </div>
-        <div id="news-section" class="section" style="display: none;">
+            <p>Информация о меню...</p>
+        </section>
+        <section id="news">
             <h2>Новости</h2>
-            <!-- Новости -->
-        </div>
-        <div id="training-chat-section" class="section" style="display: none;">
+            <p>Последние новости...</p>
+        </section>
+        <section id="training-chat">
             <h2>Чат обучения</h2>
-            <!-- Чат -->
-        </div>
-    </div>
-    <script>
-        function verifyCode() {
-            const authCode = document.getElementById('auth-code').value;
-            if (authCode === 'exampleCode') { // Здесь можно добавить проверку кода через API
-                document.getElementById('auth-section').style.display = 'none';
-                document.getElementById('info-section').style.display = 'block';
-                document.getElementById('main-menu').style.display = 'block';
-                document.getElementById('employee-name').textContent = 'Имя: Иван Иванов';
-                document.getElementById('employee-position').textContent = 'Должность: Бариста';
-                document.getElementById('employee-location').textContent = 'Место работы: Кофейня №1';
-                document.getElementById('employee-access').textContent = 'Уровень доступа: Полный';
-            } else {
-                alert('Неверный верификационный код');
-            }
-        }
-        function showSection(section) {
-            const sections = ['shifts', 'map', 'tech-cards', 'menu', 'news', 'training-chat'];
-            sections.forEach(sec => {
-                document.getElementById(`${sec}-section`).style.display = 'none';
-            });
-            document.getElementById(`${section}-section`).style.display = 'block';
-        }
-    </script>
+            <p>Чат для обучения сотрудников...</p>
+        </section>
+    </main>
+    <footer>
+        <p>© 2024 Ну, погоди! Кофейня</p>
+    </footer>
 </body>
 </html>
