@@ -1,5 +1,5 @@
 import os
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
 from telegram.ext import Updater, CommandHandler, CallbackContext
 from dotenv import load_dotenv
 
@@ -19,7 +19,7 @@ if not TOKEN:
 # Обработчик команды /start
 def start(update: Update, context: CallbackContext):
     keyboard = [
-        [InlineKeyboardButton("Открыть веб-интерфейс", web_app=telegram.WebAppInfo(url="https://dzhus15.github.io/Telegram-bot/index.html"))],
+        [InlineKeyboardButton("Открыть веб-интерфейс", web_app=WebAppInfo(url="https://dzhus15.github.io/Telegram-bot/index.html"))],
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     update.message.reply_text(
