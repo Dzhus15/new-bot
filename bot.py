@@ -19,7 +19,7 @@ if not TOKEN:
 # Обработчик команды /start
 def start(update: Update, context: CallbackContext):
     keyboard = [
-        [InlineKeyboardButton("Открыть веб-интерфейс", url="https://ваш-домен.github.io/ваш-репозиторий/index.html")],
+        [InlineKeyboardButton("Открыть веб-интерфейс", url="https://dzhus15.github.io/Telegram-bot/index.html")],
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     update.message.reply_text(
