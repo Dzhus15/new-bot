@@ -1,6 +1,7 @@
 import os
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, CallbackContext
+from telegram import WebAppInfo
 from dotenv import load_dotenv
 
 # Загрузка переменных окружения из .env файла
